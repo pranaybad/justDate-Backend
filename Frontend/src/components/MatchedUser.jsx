@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const MatchedUsers = () => {
+  const navigate = useNavigate();
+
   const [matchedUsers, setMatchedUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -28,6 +31,10 @@ const MatchedUsers = () => {
     fetchMatchedUsers();
   }, []);
 
+  const handleStartChat = (user) => {
+    navigate(`/chat/${user._id}`, { state: { user } });
+  };
+
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Matched Users</h1>
@@ -48,7 +55,10 @@ const MatchedUsers = () => {
               />
               <h2 className="text-lg font-semibold mt-2">{user.name}</h2>
               <p>{user.bio || "No bio available"}</p>
-              <button className="mt-4 bg-blue-500 text-white py-2 px-4 rounded-full">
+              <button
+                onClick={() => handleStartChat(user)}
+                className="mt-4 bg-blue-500 text-white py-2 px-4 rounded-full"
+              >
                 Start Chat
               </button>
             </div>

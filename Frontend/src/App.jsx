@@ -8,6 +8,7 @@ import Signup from "./components/Signup";
 import UserProfile from "./components/UserProfile";
 import Profile from "./components/Profile";
 import MatchedUser from "./components/MatchedUser";
+import ChatWindow from "./components/ChatWindow";
 
 function App() {
   return (
@@ -45,6 +46,14 @@ function App() {
           element={
             <ProtectedRoute>
              <MatchedUser/>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/chat/:userId"
+          element={
+            <ProtectedRoute>
+             <ChatWindow/>
             </ProtectedRoute>
           }
         />

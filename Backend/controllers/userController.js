@@ -15,11 +15,13 @@ exports.getRandomUsers = async (req, res) => {
       {
         $match: {
           gender: oppositeGender,
-          _id: { $ne: loggedInUser._id }, 
-          _id: { $nin: loggedInUser.likes }, 
-        },
+          _id: {
+            $ne: loggedInUser._id,
+            $nin: loggedInUser.likes
+          },
+        }
       },
-      { $sample: { size: 10 } },
+      { $sample: { size: 10 } },      
     ]);
 
     const usersWithStatus = users.map((user) => ({

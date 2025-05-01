@@ -44,7 +44,6 @@ const UserProfile = () => {
     setUploading(true);
 
     try {
-      // If a new profile image is selected, upload it first
       if (profileImage) {
         const formData = new FormData();
         formData.append("profilePicture", profileImage);
@@ -61,7 +60,6 @@ const UserProfile = () => {
         );
 
         if (uploadResponse.data.profilePicture) {
-          // Update profile picture path in userData
           setUserData((prevData) => ({
             ...prevData,
             profilePicture: uploadResponse.data.profilePicture,
@@ -69,7 +67,6 @@ const UserProfile = () => {
         }
       }
 
-      // Now update the profile details
       await axios.put(
         `${import.meta.env.VITE_API_URL}/api/users/update-profile`,
         userData,
@@ -89,102 +86,237 @@ const UserProfile = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
-      <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
-        <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
-          User Profile
+    <div className="  min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-200 via-purple-200 to-pink-200 p-6 relative overflow-hidden">
+      {/* Subtle Background Pattern */}
+
+
+      <div className="bg-white bg-opacity-10 backdrop-blur-lg rounded-3xl shadow-2xl max-w-lg w-full p-10 relative overflow-hidden transform transition-all duration-700 hover:scale-105 border border-white border-opacity-20">
+        {/* Gradient Header Bar */}
+        <div className="absolute top-0 left-0 w-full h-3 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 animate-gradient"></div>
+
+        {/* Profile Header */}
+        <h2 className="text-4xl font-extrabold text-center text-black mt-6 mb-8 tracking-wide animate-fade-in drop-shadow-lg">
+          {userData.name ? `Hello, ${userData.name}!` : "Your Profile"}
         </h2>
 
-        {userData.profilePicture && (
-          <div className="flex justify-center mb-6">
-            <img
-              src={`${import.meta.env.VITE_API_URL}/uploads/${userData.profilePicture}`}
-              alt="Profile"
-              className="w-32 h-32 rounded-full object-cover"
-            />
+        {/* Profile Picture with Animated Glow */}
+        <div className="flex justify-center mb-10 relative">
+          <div className="relative group">
+            {userData.profilePicture ? (
+              <img
+                src={`${import.meta.env.VITE_API_URL}/Uploads/${userData.profilePicture}`}
+                alt="Profile"
+                className="w-36 h-36 rounded-full object-cover border-4 border-white border-opacity-30 shadow-xl transition-transform duration-500 group-hover:scale-110 group-hover:shadow-glow"
+              />
+            ) : (
+              <div className="w-36 h-36 rounded-full bg-gradient-to-br from-indigo-300 to-purple-300 flex items-center justify-center text-black text-3xl font-bold shadow-xl transition-transform duration-500 group-hover:scale-110 group-hover:shadow-glow">
+                {userData.name.charAt(0) || "U"}
+              </div>
+            )}
+            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 opacity-0 group-hover:opacity-20 transition-opacity duration-500"></div>
           </div>
-        )}
+        </div>
 
         {isEditing ? (
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Name</label>
-              <input
-                type="text"
-                value={userData.name}
-                onChange={(e) =>
-                  setUserData({ ...userData, name: e.target.value })
-                }
-                className="w-full p-2 border border-gray-300 rounded-md"
-              />
+          <form onSubmit={handleSubmit} className="space-y-6 animate-slide-up">
+            <div className="relative group">
+              <label className="block text-sm font-medium text-black mb-2">Name</label>
+              <div className="flex items-center space-x-3">
+                <svg className="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                <input
+                  type="text"
+                  value={userData.name}
+                  onChange={(e) => setUserData({ ...userData, name: e.target.value })}
+                  className="w-full p-3 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-xl text-black placeholder-gray-300 focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all duration-300 group-hover:shadow-glow"
+                  placeholder="Enter your name"
+                />
+              </div>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Email</label>
-              <input
-                type="email"
-                value={userData.email}
-                onChange={(e) =>
-                  setUserData({ ...userData, email: e.target.value })
-                }
-                className="w-full p-2 border border-gray-300 rounded-md"
-              />
+            <div className="relative group">
+              <label className="block text-sm font-medium text-black mb-2">Email</label>
+              <div className="flex items-center space-x-3">
+                <svg className="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l9-6 9 6v10a2 2 0 01-2 2H5a2 2 0 01-2-2V8z" />
+                </svg>
+                <input
+                  type="email"
+                  value={userData.email}
+                  onChange={(e) => setUserData({ ...userData, email: e.target.value })}
+                  className="w-full p-3 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-xl text-black placeholder-gray-300 focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all duration-300 group-hover:shadow-glow"
+                  placeholder="Enter your email"
+                />
+              </div>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Gender</label>
-              <input
-                type="text"
-                value={userData.gender}
-                onChange={(e) =>
-                  setUserData({ ...userData, gender: e.target.value })
-                }
-                className="w-full p-2 border border-gray-300 rounded-md"
-              />
+            <div className="relative group">
+              <label className="block text-sm font-medium text-black mb-2">Gender</label>
+              <div className="flex items-center space-x-3">
+                <svg className="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+                </svg>
+                <input
+                  type="text"
+                  value={userData.gender}
+                  onChange={(e) => setUserData({ ...userData, gender: e.target.value })}
+                  className="w-full p-3 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-xl text-black placeholder-gray-300 focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all duration-300 group-hover:shadow-glow"
+                  placeholder="Enter your gender"
+                />
+              </div>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Change Profile Picture
-              </label>
+            <div className="relative group">
+              <label className="block text-sm font-medium text-black mb-2">Change Profile Picture</label>
               <input
                 type="file"
                 accept="image/*"
                 onChange={handleImageChange}
-                className="block w-full text-sm text-gray-700 
-                         file:mr-4 file:py-2 file:px-4
-                         file:rounded-full file:border-0
-                         file:text-sm file:font-semibold
-                         file:bg-blue-50 file:text-blue-700
-                         hover:file:bg-blue-100"
+                className="block w-full text-sm text-black file:mr-4 file:py-3 file:px-6 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-indigo-500 file:text-black hover:file:bg-indigo-600 transition-colors duration-300 group-hover:shadow-glow"
               />
             </div>
 
-            <button
-              type="submit"
-              disabled={uploading}
-              className={`w-full py-2 px-4 rounded-md text-white font-semibold ${
-                uploading ? "bg-blue-300" : "bg-blue-500 hover:bg-blue-600"
-              }`}
-            >
-              {uploading ? "Saving..." : "Save Changes"}
-            </button>
+            {uploading && (
+              <div className="relative w-full h-2 bg-white bg-opacity-20 rounded-full overflow-hidden">
+                <div className="absolute top-0 left-0 h-full bg-gradient-to-r from-indigo-500 to-purple-500 animate-progress"></div>
+              </div>
+            )}
+
+            <div className="flex space-x-4">
+              <button
+                type="button"
+                onClick={() => setIsEditing(false)}
+                className="relative w-full py-3 px-4 bg-white bg-opacity-20 text-black rounded-xl font-semibold hover:bg-opacity-30 transition-all duration-300 group"
+                title="Cancel changes"
+              >
+                Cancel
+                <span className="absolute hidden group-hover:block text-xs text-black -top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 px-2 py-1 rounded">Discard changes</span>
+              </button>
+              <button
+                type="submit"
+                disabled={uploading}
+                className={`relative w-full py-3 px-4 rounded-xl text-black font-semibold flex items-center justify-center transition-all duration-300 group ${
+                  uploading ? "bg-indigo-400 cursor-not-allowed" : "bg-indigo-600 hover:bg-indigo-700"
+                }`}
+                title="Save changes"
+              >
+                {uploading ? (
+                  <svg className="animate-spin h-5 w-5 mr-2 text-black" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+                  </svg>
+                ) : null}
+                {uploading ? "Saving..." : "Save Changes"}
+                <span className="absolute hidden group-hover:block text-xs text-black -top-8 left-1/2 transform -translate-x-1/2 bg-indigo-600 px-2 py-1 rounded">
+                  {uploading ? "Processing..." : "Save profile"}
+                </span>
+              </button>
+            </div>
           </form>
         ) : (
-          <div className="space-y-2">
-            <p className="text-lg font-semibold">Name: {userData.name}</p>
-            <p className="text-lg font-semibold">Email: {userData.email}</p>
-            <p className="text-lg font-semibold">Gender: {userData.gender}</p>
+          <div className="space-y-6 animate-slide-up">
+            <div className="flex items-center space-x-4 bg-white bg-opacity-20 p-4 rounded-xl transition-all duration-300 hover:bg-opacity-30 group">
+              <svg className="w-6 h-6 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+              <div>
+                <span className="text-sm text-gray-300">Name</span>
+                <p className="text-lg font-semibold text-black">{userData.name || "Not set"}</p>
+              </div>
+            </div>
+            <div className="flex items-center space-x-4 bg-white bg-opacity-20 p-4 rounded-xl transition-all duration-300 hover:bg-opacity-30 group">
+              <svg className="w-6 h-6 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l9-6 9 6v10a2 2 0 01-2 2H5a2 2 0 01-2-2V8z" />
+              </svg>
+              <div>
+                <span className="text-sm text-gray-300">Email</span>
+                <p className="text-lg font-semibold text-black">{userData.email || "Not set"}</p>
+              </div>
+            </div>
+            <div className="flex items-center space-x-4 bg-white bg-opacity-20 p-4 rounded-xl transition-all duration-300 hover:bg-opacity-30 group">
+              <svg className="w-6 h-6 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+              </svg>
+              <div>
+                <span className="text-sm text-gray-300">Gender</span>
+                <p className="text-lg font-semibold text-black">{userData.gender || "Not set"}</p>
+              </div>
+            </div>
 
             <button
               onClick={() => setIsEditing(true)}
-              className="mt-4 py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 w-full"
+              className="relative w-full py-3 px-4 bg-indigo-600 text-black rounded-xl font-semibold hover:bg-indigo-700 transition-all duration-300 flex items-center justify-center space-x-2 group"
+              title="Edit profile"
             >
-              Edit Profile
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+              </svg>
+              <span>Edit Profile</span>
+              <span className="absolute hidden group-hover:block text-xs text-black -top-8 left-1/2 transform -translate-x-1/2 bg-indigo-600 px-2 py-1 rounded">Update your info</span>
             </button>
           </div>
         )}
       </div>
+
+      <style jsx>{`
+        @keyframes fade-in {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+        @keyframes slide-up {
+          from {
+            transform: translateY(20px);
+            opacity: 0;
+          }
+          to {
+            transform: translateY(0);
+            opacity: 1;
+          }
+        }
+        @keyframes gradient {
+          0% {
+            background-position: 0% 50%;
+          }
+          50% {
+            background-position: 100% 50%;
+          }
+          100% {
+            background-position: 0% 50%;
+          }
+        }
+        @keyframes progress {
+          0% {
+            width: 0%;
+          }
+          50% {
+            width: 80%;
+          }
+          100% {
+            width: 100%;
+          }
+        }
+        .animate-fade-in {
+          animation: fade-in 0.6s ease-out;
+        }
+        .animate-slide-up {
+          animation: slide-up 0.6s ease-out;
+        }
+        .animate-gradient {
+          animation: gradient 8s ease infinite;
+          background-size: 200% 200%;
+        }
+        .animate-progress {
+          animation: progress 2s ease-in-out infinite;
+        }
+        .shadow-glow {
+          box-shadow: 0 0 15px rgba(168, 85, 247, 0.5);
+        }
+      `}</style>
     </div>
   );
 };
